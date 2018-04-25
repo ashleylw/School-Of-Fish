@@ -115,6 +115,7 @@ public class GameScene {
     		Game.playerModel.addPlayerAtIndex(joinGameCenter.playerNameTF.getText(), i);
     		
     		root.setCenter(mainGameCenter);
+    		bottom.joinGameButton.setDisable(true);
     	});
     	
     	title = new Label("School Of Fish");

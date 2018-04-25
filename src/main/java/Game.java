@@ -89,10 +89,10 @@ public class Game {
 		}
     	
     	switch (preRoundLength) {
-	    	case "1 minutes":
+	    	case "1 minute":
 	    		preRoundLengthInt = 60;
 				break;
-			case "1 minutes 30 seconds":
+			case "1 minute 30 seconds":
 				preRoundLengthInt = 90;
 				break;
 			case "2 minutes":
