@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -33,8 +35,11 @@ public class Main extends Application {
 	public static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
     public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     public static final String CREDENTIALS_FOLDER = "credentials"; // Directory to store user credentials.
-    public static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+    public static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS);
     public static final String CLIENT_SECRET_DIR = "client_secret.json";
+    
+    public static Game game;
+    public static CurrentPlayer currentPlayer;
 	
     /**
      * JavaFX Visual Components
@@ -42,16 +47,23 @@ public class Main extends Application {
 	private GameScene gs;
 	private Stage stage;
 	
+	// backgrounds
 	public static final Background LIGHTCYAN =
 			new Background(new BackgroundFill(Color.LIGHTCYAN, new CornerRadii(0.0), new Insets(0,0,0,0)));
     public static final Background TEAL =
 			new Background(new BackgroundFill(Color.TEAL, new CornerRadii(0.0), new Insets(0,0,0,0)));
 	public static final Background DARKCYAN =
 			new Background(new BackgroundFill(Color.DARKCYAN, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	public static final Background LIGHTSEAGREEN =
+			new Background(new BackgroundFill(Color.LIGHTSEAGREEN, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	
+	// fonts
+	public static final Font ARIAL_22 = new Font("Arial", 22);
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		this.stage = stage;
+		currentPlayer = new CurrentPlayer();
 		
 		gs = new GameScene();
 		stage.setTitle("School Of Fish");
@@ -63,6 +75,11 @@ public class Main extends Application {
 	
 	public void showStartView() {
 		stage.setScene(gs.getScene());
+	}
+	
+	public static int randomIntBetween(int min, int max) {
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 	
 	/**

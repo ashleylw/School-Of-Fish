@@ -1,35 +1,10 @@
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
-
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.SheetsScopes;
-import com.google.api.services.sheets.v4.model.ValueRange;
-
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class GameScene {
@@ -41,16 +16,34 @@ public class GameScene {
     private Scene scene;
     private BorderPane root;
     private StackPane top;
-    private MainGameView center;
-    private GameListView left;
+    private LogView left;
     private PlayerListView right;
-    private LogView bottom;
+    private GameButtonsView bottom;
+    
+    private MainGameView mainGameCenter;
+    private CreateGameView createGameCenter;
+    private JoinGameView joinGameCenter;
     
     private Label title;
     private Label label;
     
+    private AnimationTimer timer;
+    
 	public GameScene() {
+		getGameData();
 		setUp();
+		
+		if (Main.game.getName().equals("null")) {
+			root.setCenter(createGameCenter);
+		} else {
+			root.setCenter(joinGameCenter);
+		}
+		
+		callForUpdates();
+	}
+	
+	private void getGameData() {
+		Main.game = new Game();
 	}
     
     public void setUp() {
@@ -69,19 +62,71 @@ public class GameScene {
     
     public void setUpView() {
     	top = new StackPane();
-    	center = new MainGameView();
-    	left = new GameListView();
+    	mainGameCenter = new MainGameView();
+    	createGameCenter = new CreateGameView();
+    	joinGameCenter = new JoinGameView();
+    	left = new LogView();
     	right = new PlayerListView();
-    	bottom = new LogView();
+    	bottom = new GameButtonsView();
+    	
+    	joinGameCenter.playerNameTF.setOnKeyReleased(e -> {
+    		if (!joinGameCenter.playerNameTF.getText().equals("") && Game.playerModel.getPlayerList().size() < 13) {
+    			bottom.joinGameButton.setDisable(false);
+    		} else {
+    			bottom.joinGameButton.setDisable(true);
+    		}
+    	});
+    	
+    	createGameCenter.createGameButton.setOnMouseClicked(e -> {
+    		Main.game = new Game();
+    		createGameCenter.createGameButton.setDisable(true);
+    		bottom.startGameButton.setDisable(false);
+    	});
+    	
+    	bottom.startGameButton.setOnMouseClicked(e -> {
+    		root.setCenter(mainGameCenter);
+    	});
+    	
+    	bottom.joinGameButton.setOnMouseClicked(e -> {
+    		// Find available index for current player using random number between 0 and 12
+    		int i = Main.randomIntBetween(0, 12);
+    		boolean free = false;
+    		while (!free) {
+    			for (Player p : Game.playerModel.getPlayerList()) {
+    				if (p.getIndex() == i) {
+    					free = false;
+    					i = Main.randomIntBetween(0, 12);
+    					break;
+    				}
+    				free = true;
+    			}
+    		}
+    		Main.currentPlayer.setIndex(i);
+    		Game.playerModel.addPlayerAtIndex(joinGameCenter.playerNameTF.getText(), i);
+    		
+    		root.setCenter(mainGameCenter);
+    	});
     	
     	title = new Label("School Of Fish");
-    	title.setFont(new Font("Arial", 24));
+    	title.setFont(new Font("Arial", 32));
     	top.getChildren().add(title);
     	
     	root.setTop(top);
-    	root.setCenter(center);
     	root.setLeft(left);
     	root.setRight(right);
     	root.setBottom(bottom);
+    }
+    
+    private void callForUpdates() {
+		timer = new AnimationTimer(){
+			@Override
+			public void handle(long now) {
+				update();
+			}
+			private void update() {
+				
+			}
+		};
+		timer.start();
     }
 }

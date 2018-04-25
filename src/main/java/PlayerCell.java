@@ -19,7 +19,6 @@ public class PlayerCell extends ListCell<Player> {
 	
 	}
 
-	
 	@Override
 	public void updateItem(Player p, boolean empty) {
 		super.updateItem(p, empty);
@@ -29,29 +28,12 @@ public class PlayerCell extends ListCell<Player> {
 		}
 		else {
 			//first label: name + picture
-			first.setText(p.getName());
-			/*
-			ImageView icon = new ImageView(p.getImageUrl());
-			icon.setFitWidth(10); icon.setFitHeight(10);
-			first.setGraphic(icon);
-			*/
-			
-			second.setText(p.getImageUrl());
-			//should get from model, instead of hard-coding
-			/*
-			ImageView hog = new ImageView("images/" + p.getName()+".png");
-			shrinkImage(hog);
-			second.setGraphic(hog);
-			*/
+			first.setText(p.getIndex() + ". " + p.getName());
+			second.setText(p.getRole().toString());
 			
 			setGraphic(row);
 		}
 		
-		
-	}
-	private void shrinkImage(ImageView i) {
-		i.setFitWidth(20);
-		i.setPreserveRatio(true);
 		
 	}
 	
