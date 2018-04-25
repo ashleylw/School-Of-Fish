@@ -17,17 +17,17 @@ public class CreateGameView extends GridPane{
     private Label noGameRunningLabel;
     
     private Label gameNameLabel;
-    private TextField gameNameTF;
+    public TextField gameNameTF;
     private Label bigFishLabel;
-    private TextField bigFishTF;
+    public TextField bigFishTF;
     
     private GridPane roundInfo;
     private Label roundNumberLabel;
-    private ComboBox<Integer> roundNumberCB;
+    public ComboBox<Integer> roundNumberCB;
     private Label roundLengthLabel;
-    private ComboBox<String> roundLengthCB;
+    public ComboBox<String> roundLengthCB;
     private Label preRoundLengthLabel;
-    private ComboBox<String> preRoundLengthCB;
+    public ComboBox<String> preRoundLengthCB;
     
     public Button createGameButton; 
     
@@ -44,16 +44,16 @@ public class CreateGameView extends GridPane{
 		this.getColumnConstraints().add(new ColumnConstraints(300)); // column 0 is 100 wide
 	    this.getColumnConstraints().add(new ColumnConstraints(300)); // column 1 is 100 wide
 	    
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
-	    this.getRowConstraints().add(new RowConstraints(75));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
+	    this.getRowConstraints().add(new RowConstraints(50));
 	    
-	    this.setHgap(10);
-	    this.setVgap(10);
+	    this.setHgap(20);
+	    this.setVgap(20);
 	    this.setAlignment(Pos.CENTER);
 		
 		noGameRunningLabel = new Label("There is no game currently running. Create your own game!");
@@ -71,11 +71,11 @@ public class CreateGameView extends GridPane{
 		
 		roundInfo = new GridPane();
 		roundInfo.setAlignment(Pos.CENTER);
-		roundInfo.setPadding(new Insets(20, 20, 20, 20));
+		roundInfo.setPadding(new Insets(10, 10, 10, 10));
 		roundInfo.setBackground(Main.LIGHTSEAGREEN);
-	    roundInfo.getRowConstraints().add(new RowConstraints(75));
-	    roundInfo.getRowConstraints().add(new RowConstraints(75));
-	    roundInfo.getRowConstraints().add(new RowConstraints(75));
+	    roundInfo.getRowConstraints().add(new RowConstraints(50));
+	    roundInfo.getRowConstraints().add(new RowConstraints(50));
+	    roundInfo.getRowConstraints().add(new RowConstraints(50));
 	    roundInfo.setHgap(10);
 	    roundInfo.setVgap(10);
 		

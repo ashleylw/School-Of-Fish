@@ -69,7 +69,7 @@ public class MainGameView extends GridPane {
 		roundInfo.setPadding(new Insets(20, 20, 20, 20));
 		roundInfo.setBackground(Main.LIGHTSEAGREEN);
 		
-		roundNumber = new Label("Round " + Main.game.getNumRounds());
+		roundNumber = new Label("Round " + Main.game.getCurrentRound());
 		timeLeft = new Label(Main.game.getTimeLeft()/60 + " mins " + Main.game.getTimeLeft()%60 + " secs");
 		roundInfo.getChildren().addAll(roundNumber, timeLeft);
 		
@@ -99,19 +99,5 @@ public class MainGameView extends GridPane {
 		this.add(habitatLabel, 3, 2, 3, 1);
 		this.add(roleFactLabel, 3, 3, 3, 2);
 	}
-	
-    private void checkForBigFish() {
-    	// if BigFish exists
-    	if (true) {
-    		checkForPlayers();
-    	} else {
-    		
-    	}
-    }
-    
-    private void checkForPlayers() {
-    	
-    }
-    
     
 }

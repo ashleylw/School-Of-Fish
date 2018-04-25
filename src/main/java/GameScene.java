@@ -2,8 +2,11 @@
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 
@@ -79,12 +82,19 @@ public class GameScene {
     	
     	createGameCenter.createGameButton.setOnMouseClicked(e -> {
     		Main.game = new Game();
+    		Main.game.setGameInfo(createGameCenter.gameNameTF.getText(), createGameCenter.bigFishTF.getText(),
+    				createGameCenter.roundNumberCB.getSelectionModel().getSelectedItem(),
+    				createGameCenter.roundLengthCB.getSelectionModel().getSelectedItem(),
+    				createGameCenter.preRoundLengthCB.getSelectionModel().getSelectedItem());
     		createGameCenter.createGameButton.setDisable(true);
     		bottom.startGameButton.setDisable(false);
     	});
     	
     	bottom.startGameButton.setOnMouseClicked(e -> {
+    		mainGameCenter = new MainGameView();
     		root.setCenter(mainGameCenter);
+    		timer.start();
+    		bottom.startGameButton.setDisable(true);
     	});
     	
     	bottom.joinGameButton.setOnMouseClicked(e -> {
@@ -124,9 +134,9 @@ public class GameScene {
 				update();
 			}
 			private void update() {
-				
+				mainGameCenter = new MainGameView();
+	    		root.setCenter(mainGameCenter);
 			}
 		};
-		timer.start();
     }
 }
