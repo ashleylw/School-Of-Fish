@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -141,6 +143,12 @@ public class MainGameView extends GridPane {
 					Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()) != null) {
 				String roleFact = Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getRoleFact();
 				roleFactLabel.setText(roleFact);
+				ImageView graphic = new ImageView(new Image("images/" 
+						+ Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getRole() 
+						+ ".png"));
+				graphic.setFitHeight(100);
+		        graphic.setPreserveRatio(true);
+				roleFactLabel.setGraphic(graphic);
 			}
 		} else if (Main.currentPlayer.getSheetsIndex() == 13) {
 			roleFactLabel.setText("You are the BIG FISH");
@@ -199,7 +207,7 @@ public class MainGameView extends GridPane {
 		roundNumber.setFont(Main.ARIAL_22);
 		timeLeft.setFont(Main.ARIAL_22);
 		habitatLabel.setFont(Main.ARIAL_22);
-		roleFactLabel.setFont(Main.ARIAL_22);
+		roleFactLabel.setFont(new Font("Arial", 20));
 		nextHabitatLabel.setFont(new Font("Arial", 18));
 		
 		this.add(gameName, 0, 0, 3, 1);

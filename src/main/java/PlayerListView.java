@@ -23,7 +23,7 @@ public class PlayerListView extends VBox {
 	private Button biteButton;
 	private Label name;
 	
-	private Text biteInfo;
+	private Label biteInfo;
 
 	public PlayerListView() {
 		this.setSpacing(20);
@@ -48,6 +48,8 @@ public class PlayerListView extends VBox {
 		name.setAlignment(Pos.CENTER);
 		name.setFont(new Font("Arial", 16));
 		biteButton = new Button("BITE");
+		//biteButton.setBackground(Main.NAVY);
+		//biteButton.setTextFill(Color.WHITE);
 		biteButton.setOnMouseClicked(e -> {
 			
 			Player attacker = Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex());
@@ -59,6 +61,7 @@ public class PlayerListView extends VBox {
 				Player defender = Game.playerModel.getPlayerList().get(defenderIndex);
 				biteInfo.setText("You successfully bit\n" + defender.getName()
 						+ ".\nThey are now dead.");
+				biteInfo.setTextFill(Color.LIGHTGREEN);
 				defender.setAliveStatus(false);
 				defender.setCurrentHabitat(Habitat.GRAVE);
 				defender.writePlayerInfo();
@@ -69,6 +72,7 @@ public class PlayerListView extends VBox {
 					// attacker dies
 					biteInfo.setText("You unfortunately bit\n" + Game.playerModel.getPlayerList().get(defenderIndex).getName()
 							+ ".\nYou are now dead.");
+					biteInfo.setTextFill(Color.LIGHTPINK);
 					attacker.setAliveStatus(false);
 					attacker.setCurrentHabitat(Habitat.GRAVE);
 					attacker.writePlayerInfo();
@@ -86,10 +90,12 @@ public class PlayerListView extends VBox {
 		profile.setBackground(Main.LIGHTCYAN);
 		profile.setPadding(new Insets(20,20,20,20));
 		
-		biteInfo = new Text("");
-		biteInfo.setFont(new Font("Arial", 18));
+		biteInfo = new Label("");
+		biteInfo.setFont(new Font("Arial", 16));
+		biteInfo.setPrefHeight(200);
+		biteInfo.setTextFill(Color.WHITE);
 		
-		this.getChildren().addAll(profile, biteInfo);
+		this.getChildren().addAll(profile);
 	}
 	
 	// sets up listview 
@@ -131,7 +137,7 @@ public class PlayerListView extends VBox {
 			}
 		);
 
-		this.getChildren().add(list);
+		this.getChildren().addAll(list, biteInfo);
 	}
 	
 	public static void updatePlayerList() {

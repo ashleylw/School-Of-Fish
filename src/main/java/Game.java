@@ -79,6 +79,12 @@ public class Game {
     	this.numRounds = numRounds;
     	
     	switch (roundLength) {
+	    	case "2 minutes":
+				this.roundLength = 120;
+				break;
+			case "2 minutes 30 seconds":
+				this.roundLength = 150;
+				break;
 			case "3 minutes":
 				this.roundLength = 180;
 				break;

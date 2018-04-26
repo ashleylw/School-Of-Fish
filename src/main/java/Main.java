@@ -66,6 +66,10 @@ public class Main extends Application {
 			new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(0.0), new Insets(0,0,0,0)));
 	public static final Background LIGHTPINK =
 			new Background(new BackgroundFill(Color.LIGHTPINK, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	public static final Background LIGHTGREEN =
+			new Background(new BackgroundFill(Color.LIGHTGREEN, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	public static final Background NAVY =
+			new Background(new BackgroundFill(Color.NAVY, new CornerRadii(0.0), new Insets(0,0,0,0)));
 	
 	// fonts
 	public static final Font ARIAL_22 = new Font("Arial", 22);
@@ -97,18 +101,19 @@ public class Main extends Application {
 	    // If Player...
 		} else {
 		    // If Game is running, set Dead
-			if (!game.getName().equals("")) {
+			//if (!game.getName().equals("")) {
 				// TODO CHANGE
-				game.playerModel.addPlayerAtIndex("", currentPlayer.getSheetsIndex());
+				Game.playerModel.addPlayerAtIndex("", currentPlayer.getSheetsIndex());
 		    // If Game is finished, erase name
-			} else {
-				Player p = game.playerModel.getPlayerList().get(currentPlayer.getListIndex());
+			//} else {
+				/*Player p = Game.playerModel.getPlayerList().get(currentPlayer.getListIndex());
 				p.setName("");
 				p.setCurrentHabitat(p.getRole().getHome());
 				p.setPreviousHabitat(p.getRole().getHome());
 				p.setNextHabitat(p.getRole().getHome());
 				p.writePlayerInfo();
-			}
+				*/
+			//}
 	    }
 	}
 	

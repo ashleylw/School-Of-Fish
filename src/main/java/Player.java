@@ -71,6 +71,7 @@ public class Player {
         
         currentHabitat = this.role.getHome();
         previousHabitat = this.role.getHome();
+        nextHabitat = this.role.getHome();
 
         peekOne = this.name;
         peekTwo = this.name;
@@ -272,7 +273,7 @@ public class Player {
 		        .setRequests(requests);
 		service.spreadsheets().batchUpdate("1h7XeOnC2ITdCYz921GWol7OZfNnUpAn0e1Dgl4ExzP0", batchUpdateRequest)
 		        .execute();
-		
+		/*
 		// 9 - Win Status
 		values.clear();
 		requests.clear();
@@ -295,7 +296,7 @@ public class Player {
 		        .setRequests(requests);
 		service.spreadsheets().batchUpdate("1h7XeOnC2ITdCYz921GWol7OZfNnUpAn0e1Dgl4ExzP0", batchUpdateRequest)
 		        .execute();
-		
+		*/
 		// 11 - Second Peek / Disguise
 		values.clear();
 		requests.clear();

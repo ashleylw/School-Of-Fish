@@ -87,9 +87,9 @@ public class CreateGameView extends GridPane{
 		
 		roundLengthLabel = new Label("Round Length:");
 		roundLengthCB = new ComboBox<String>();
-		roundLengthCB.getItems().addAll("3 minutes", "3 minutes 30 seconds", "4 minutes", "4 minutes 30 seconds", "5 minutes",
+		roundLengthCB.getItems().addAll("2 minutes", "2 minutes 30 seconds", "3 minutes", "3 minutes 30 seconds", "4 minutes", "4 minutes 30 seconds", "5 minutes",
 				"5 minutes 30 seconds", "6 minutes", "6 minutes 30 seconds", "7 minutes", "7 minutes 30 seconds", "8 minutes");
-		roundLengthCB.getSelectionModel().select("3 minutes");
+		roundLengthCB.getSelectionModel().select("2 minutes");
 		
 		preRoundLengthLabel = new Label("PreRound Length:");
 		preRoundLengthCB = new ComboBox<String>();

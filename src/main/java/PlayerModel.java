@@ -209,7 +209,7 @@ public class PlayerModel {
             	p.setNextHabitat(Habitat.getHabitatForName(row.get(15)+""));
             	
             	// and the role fact
-            	p.setRoleFact("Your role is the " + p.getRole().getName() + ".\nYou are " + (p.getAliveStatus() ? "alive." : "dead."));
+            	p.setRoleFact("Your role is the\n" + p.getRole().getName() + ".\nYou are " + (p.getAliveStatus() ? "alive." : "dead."));
                 
         		players.add(p);
         		if (p.getIndex() == Main.currentPlayer.getSheetsIndex()) {
