@@ -1,8 +1,8 @@
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class PlayerCell extends ListCell<Player> {
 
@@ -14,7 +14,9 @@ public class PlayerCell extends ListCell<Player> {
 		row = new HBox(); 
 		row.setSpacing(4);
 		first = new Label();
+		first.setTextFill(Color.DARKCYAN);
 		second = new Label();
+		second.setTextFill(Color.CRIMSON);
 		row.getChildren().addAll(first, second);
 	
 	}
@@ -27,10 +29,20 @@ public class PlayerCell extends ListCell<Player> {
             setGraphic(null);
 		}
 		else {
-			//first label: name + picture
-			first.setText(p.getIndex() + ". " + p.getName());
-			second.setText(p.getRole().toString());
+			if (p.getAliveStatus()) {
+				this.setDisable(false);
+			} else this.setDisable(true);;
 			
+			first.setText(p.getName());
+			
+			// IF currentPlayer is Big Fish, show Role
+			// ELSE dont
+			
+			if (Main.currentPlayer.getSheetsIndex() == 13) { // Big Fish
+				second.setText(p.getRole().toString());
+			} else { // Player
+				second.setText("");
+			}
 			setGraphic(row);
 		}
 		

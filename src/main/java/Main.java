@@ -19,8 +19,14 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -56,6 +62,10 @@ public class Main extends Application {
 			new Background(new BackgroundFill(Color.DARKCYAN, new CornerRadii(0.0), new Insets(0,0,0,0)));
 	public static final Background LIGHTSEAGREEN =
 			new Background(new BackgroundFill(Color.LIGHTSEAGREEN, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	public static final Background LIGHTBLUE =
+			new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(0.0), new Insets(0,0,0,0)));
+	public static final Background LIGHTPINK =
+			new Background(new BackgroundFill(Color.LIGHTPINK, new CornerRadii(0.0), new Insets(0,0,0,0)));
 	
 	// fonts
 	public static final Font ARIAL_22 = new Font("Arial", 22);
@@ -64,6 +74,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		this.stage = stage;
 		currentPlayer = new CurrentPlayer();
+		game = new Game();
 		
 		gs = new GameScene();
 		stage.setTitle("School Of Fish");
@@ -71,6 +82,34 @@ public class Main extends Application {
 		showStartView();
 		
 		stage.show();
+	}
+	
+	@Override
+	public void stop(){
+	    System.out.println("Stage is closing");
+	    // TODO
+	    // If Big Fish (index == 13), set Game Name and Big Fish names to empty strings
+	    // also show Players game was interrupted by Big Fish leaving. Restart app to play new game.
+	    if (currentPlayer.getSheetsIndex() == 13) {
+	    	game.setName("");
+	    	game.setBigFish("");
+	    	game.writeGameData();
+	    // If Player...
+		} else {
+		    // If Game is running, set Dead
+			if (!game.getName().equals("")) {
+				// TODO CHANGE
+				game.playerModel.addPlayerAtIndex("", currentPlayer.getSheetsIndex());
+		    // If Game is finished, erase name
+			} else {
+				Player p = game.playerModel.getPlayerList().get(currentPlayer.getListIndex());
+				p.setName("");
+				p.setCurrentHabitat(p.getRole().getHome());
+				p.setPreviousHabitat(p.getRole().getHome());
+				p.setNextHabitat(p.getRole().getHome());
+				p.writePlayerInfo();
+			}
+	    }
 	}
 	
 	public void showStartView() {

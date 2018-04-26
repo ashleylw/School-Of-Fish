@@ -2,11 +2,15 @@
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class MainGameView extends GridPane {
     
@@ -16,6 +20,10 @@ public class MainGameView extends GridPane {
     private Label gameName;
     private Label bigFish;
     
+    private VBox peekInfo;
+    private Label peekOneLabel;
+    private ComboBox<String> peekOneCB;
+    
     private VBox roundInfo;
     private Label roundNumber;
     private Label timeLeft;
@@ -23,13 +31,13 @@ public class MainGameView extends GridPane {
     private Label habitatLabel;
     private Label roleFactLabel;
     
+    private HBox nextHabitat;
+    private Label nextHabitatLabel;
+    private ComboBox<String> nextHabitatCB;
+    
 	
 	public MainGameView() {	
-	    // change later
-	    Main.currentPlayer.setIndex(0);
-	    
 		setUp();
-		//checkForBigFish();
 	}
 	
 	private void setUp() {
@@ -53,14 +61,56 @@ public class MainGameView extends GridPane {
 		
 		gameName = new Label("Game Name");
 		GridPane.setHalignment(gameName, HPos.CENTER);
-		if (!Main.game.getName().equalsIgnoreCase("null")) {
+		if (!Main.game.getName().equals("")) {
 			gameName.setText(Main.game.getName());
 		}
 		
 		bigFish = new Label("Big Fish: Name");
 		GridPane.setHalignment(bigFish, HPos.CENTER);
-		if (!Main.game.getBigFish().equalsIgnoreCase("null")) {
+		if (Main.game.getBigFish() != null) {
 			bigFish.setText("Big Fish: " + Main.game.getBigFish());
+		}
+		
+		peekInfo = new VBox();
+		peekInfo.setAlignment(Pos.CENTER);
+		peekInfo.setSpacing(20);
+		peekInfo.setPadding(new Insets(20, 20, 20, 20));
+		peekInfo.setBackground(Main.LIGHTBLUE);
+		
+		if (Main.currentPlayer.getSheetsIndex() != 13 && Main.currentPlayer.getListIndex() != -1) {
+			Player cp = Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex());
+			peekOneCB = new ComboBox<String>();
+			for (Player p : Game.playerModel.getPlayerList()) {
+				peekOneCB.getItems().add(p.getName());
+			}
+			peekOneCB.setPlaceholder(new Text("Choose Player to Peek"));
+			peekOneLabel = new Label("Choose Player to Peek");
+			peekOneLabel.setFont(new Font("Arial", 16));
+			
+			if (Game.playerModel.getPlayerList().size() > 0 && cp != null) {
+				// If Player has peekOne, setUp that view
+				if (cp.getPeekOne().equals(cp.getName())) {
+					peekOneCB.setOnAction(e -> {
+						peekOneCB.setDisable(true);
+						String peekName = peekOneCB.getSelectionModel().getSelectedItem();
+						cp.setPeekOne(peekName);
+						cp.writePlayerInfo();
+						peekOneLabel.setText(Game.playerModel.getPlayerWithName(peekName).getRole().getName());
+					});
+				} else {
+					peekOneCB.getSelectionModel().select(cp.getPeekOne());
+					peekOneCB.setDisable(true);
+					peekOneLabel.setText(Game.playerModel.getPlayerWithName(cp.getPeekOne()).getRole().getName());
+				}
+				
+				if (Main.game.getCurrentRound() != -1) {
+					peekOneCB.setDisable(true);
+				}
+				
+				peekInfo.getChildren().addAll(peekOneCB, peekOneLabel);
+			}
+		} else {
+			// nothing...
 		}
 		
 		roundInfo = new VBox();
@@ -75,16 +125,74 @@ public class MainGameView extends GridPane {
 		
 		habitatLabel = new Label("Habitat");
 		GridPane.setHalignment(habitatLabel, HPos.CENTER);
-		if (Game.playerModel.getPlayerList().get(Main.currentPlayer.getIndex()) != null) {
-			habitatLabel.setText(Game.playerModel.getPlayerList().get(Main.currentPlayer.getIndex()).getCurrentHabitat().toString());
+		if (Main.currentPlayer.getSheetsIndex() != 13 && Main.currentPlayer.getListIndex() != -1) {
+			if (Game.playerModel.getPlayerList().size() > 0 &&
+					Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()) != null) {
+				//habitatLabel.setText(Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getCurrentHabitat().getName());
+			}
+		} else {
+			habitatLabel.setText("");
 		}
 		
 		roleFactLabel = new Label("Role-Specific Fact");
 		GridPane.setHalignment(roleFactLabel, HPos.CENTER);
-		if (Game.playerModel.getPlayerList().get(Main.currentPlayer.getIndex()) != null) {
-			String role = Game.playerModel.getPlayerList().get(Main.currentPlayer.getIndex()).getRole().toString();
-			roleFactLabel.setText("Your role is the " + role);
+		if (Main.currentPlayer.getSheetsIndex() != 13 && Main.currentPlayer.getListIndex() != -1) {
+			if (Game.playerModel.getPlayerList().size() > 0 &&
+					Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()) != null) {
+				String roleFact = Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getRoleFact();
+				roleFactLabel.setText(roleFact);
+			}
+		} else if (Main.currentPlayer.getSheetsIndex() == 13) {
+			roleFactLabel.setText("You are the BIG FISH");
+		} else {
+			roleFactLabel.setText("Getting your role...");
 		}
+		
+		nextHabitat = new HBox();
+		nextHabitat.setAlignment(Pos.CENTER);
+		nextHabitat.setSpacing(20);
+		nextHabitat.setPadding(new Insets(20, 20, 20, 20));
+		nextHabitat.setBackground(Main.LIGHTSEAGREEN);
+		
+		nextHabitatLabel = new Label("Next Habitat:");
+		
+		if (Main.currentPlayer.getSheetsIndex() != 13 && Main.currentPlayer.getListIndex() != -1) {
+			nextHabitatCB = new ComboBox<String>();
+			Player p = Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex());
+			
+			if (Game.playerModel.getPlayerList().size() > 0 && p != null) {
+				if (p.getCurrentHabitat() != p.getRole().getHome() && p.getPreviousHabitat() != p.getRole().getHome()) {
+					nextHabitatCB.getItems().add(p.getRole().getHome().getName());
+				} else {
+					nextHabitatCB.getItems().addAll("Ocean", "Kelp Forest", "Reef");
+					if (p.canVisitIsland()) nextHabitatCB.getItems().addAll("Island");
+				}
+				nextHabitatCB.getSelectionModel().select(p.getNextHabitat().getName());
+				
+				// If Player chooses where to Move, change nextHabitat for transitioning period
+				nextHabitatCB.setOnAction(e -> {
+					p.setNextHabitat(Habitat.getHabitatForName(nextHabitatCB.getSelectionModel().getSelectedItem()));
+					p.writePlayerInfo();
+				});
+				
+				if (Main.game.getCurrentRound() >= 0) {
+					nextHabitatCB.setDisable(true);
+					if (Main.game.getTimeLeft() == Main.game.getRoundLength()) {
+						p.setPreviousHabitat(p.getCurrentHabitat());
+						p.setCurrentHabitat(p.getNextHabitat());
+						p.writePlayerInfo();
+					}
+					habitatLabel.setText(Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getCurrentHabitat().getName());
+				} else {
+					habitatLabel.setText("Moving to " + p.getNextHabitat().getName());
+				}
+				
+				nextHabitat.getChildren().addAll(nextHabitatLabel, nextHabitatCB);
+			}
+		} else {
+			// nothing...
+		}
+		
 		
 		gameName.setFont(Main.ARIAL_22);
 		bigFish.setFont(Main.ARIAL_22);
@@ -92,12 +200,15 @@ public class MainGameView extends GridPane {
 		timeLeft.setFont(Main.ARIAL_22);
 		habitatLabel.setFont(Main.ARIAL_22);
 		roleFactLabel.setFont(Main.ARIAL_22);
+		nextHabitatLabel.setFont(new Font("Arial", 18));
 		
-		this.add(gameName, 0, 0, 5, 1);
-		this.add(bigFish, 0, 1, 5, 1);
+		this.add(gameName, 0, 0, 3, 1);
+		this.add(bigFish, 0, 1, 3, 1);
+		this.add(peekInfo, 3, 0, 2, 2);
 		this.add(roundInfo, 0, 2, 3, 3);
 		this.add(habitatLabel, 3, 2, 3, 1);
-		this.add(roleFactLabel, 3, 3, 3, 2);
+		this.add(roleFactLabel, 3, 3, 3, 1);
+		this.add(nextHabitat, 3, 4, 3, 1);
 	}
     
 }

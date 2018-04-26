@@ -10,6 +10,7 @@ public class GameButtonsView extends HBox {
 
 	public Button startGameButton;
 	public Button joinGameButton;
+	public Button leaveGameButton;
 
 	public GameButtonsView() {
 		this.setSpacing(20);
@@ -28,7 +29,11 @@ public class GameButtonsView extends HBox {
 		joinGameButton = new Button("Join Game");
 		joinGameButton.setFont(Main.ARIAL_22);
 		joinGameButton.setDisable(true);
-		this.getChildren().addAll(startGameButton, joinGameButton);
+		leaveGameButton = new Button("Leave Game");
+		leaveGameButton.setFont(Main.ARIAL_22);
+		leaveGameButton.setTextFill(Color.CRIMSON);
+		leaveGameButton.setDisable(true);
+		this.getChildren().addAll(leaveGameButton, startGameButton, joinGameButton);
 	}
 	
 }

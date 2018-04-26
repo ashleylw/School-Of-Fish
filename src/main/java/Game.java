@@ -34,6 +34,32 @@ public class Game {
     	playerModel = new PlayerModel();
     	log = new Log();
     	update();
+    	
+    	currentRound = 0;
+    	timeLeft = 0;
+    	writeGameData();
+    }
+    
+    public void nextRound() {
+    	if (currentRound < 0) { // Preround becoming Round
+    		currentRound = currentRound*-1;
+    		timeLeft = roundLength;
+    	} else if (currentRound > 0) { // Round becoming Preround
+    		currentRound = currentRound*-1 - 1;
+    		timeLeft = preRoundLength;
+    	} else {
+    		currentRound = -1;
+    		timeLeft = preRoundLength;
+    	}
+    	writeGameData();
+    	
+    	for (Player p : playerModel.getPlayerList()) {
+    		if (p.getAliveStatus() && p.getRoundsWithoutEating() > 0 && p.getRoundsWithoutEating() >= p.getNonEatingLimit()) {
+    			p.setAliveStatus(false);
+    			p.writePlayerInfo();
+    		}
+    		p.setRoundsWithoutEating(p.getRoundsWithoutEating()+1);
+    	}
     }
     
     public void update() {
@@ -47,42 +73,44 @@ public class Game {
     }
     
     public void setGameInfo(String name, String bigFish, int numRounds, String roundLength, String preRoundLength) {
-    	int roundLengthInt = 0;
-    	int preRoundLengthInt = 0;
+    	
+    	this.name = name;
+    	this.bigFish = bigFish;
+    	this.numRounds = numRounds;
     	
     	switch (roundLength) {
 			case "3 minutes":
-				roundLengthInt = 180;
+				this.roundLength = 180;
 				break;
 			case "3 minutes 30 seconds":
-				roundLengthInt = 210;
+				this.roundLength = 210;
 				break;
 			case "4 minutes":
-				roundLengthInt = 240;
+				this.roundLength = 240;
 				break;
 			case "4 minutes 30 seconds":
-				roundLengthInt = 270;
+				this.roundLength = 270;
 				break;
 			case "5 minutes":
-				roundLengthInt = 300;
+				this.roundLength = 300;
 				break;
 			case "5 minutes 30 seconds":
-				roundLengthInt = 330;
+				this.roundLength = 330;
 				break;
 			case "6 minutes":
-				roundLengthInt = 360;
+				this.roundLength = 360;
 				break;
 			case "6 minutes 30 seconds":
-				roundLengthInt = 390;
+				this.roundLength = 390;
 				break;
 			case "7 minutes":
-				roundLengthInt = 420;
+				this.roundLength = 420;
 				break;
 			case "7 minutes 30 seconds":
-				roundLengthInt = 450;
+				this.roundLength = 450;
 				break;
 			case "8 minutes":
-				roundLengthInt = 480;
+				this.roundLength = 480;
 				break;
 			default:
 				break;
@@ -90,48 +118,52 @@ public class Game {
     	
     	switch (preRoundLength) {
 	    	case "1 minute":
-	    		preRoundLengthInt = 60;
+	    		this.preRoundLength = 60;
 				break;
 			case "1 minute 30 seconds":
-				preRoundLengthInt = 90;
+				this.preRoundLength = 90;
 				break;
 			case "2 minutes":
-				preRoundLengthInt = 120;
+				this.preRoundLength = 120;
 				break;
 			case "2 minutes 30 seconds":
-				preRoundLengthInt = 150;
+				this.preRoundLength = 150;
 				break;
 	    	case "3 minutes":
-	    		preRoundLengthInt = 180;
+	    		this.preRoundLength = 180;
 				break;
 			case "3 minutes 30 seconds":
-				preRoundLengthInt = 210;
+				this.preRoundLength = 210;
 				break;
 			case "4 minutes":
-				preRoundLengthInt = 240;
+				this.preRoundLength = 240;
 				break;
 			case "4 minutes 30 seconds":
-				preRoundLengthInt = 270;
+				this.preRoundLength = 270;
 				break;
 			case "5 minutes":
-				preRoundLengthInt = 300;
+				this.preRoundLength = 300;
 				break;
 			default:
 				break;
 		}
     	
+    	writeGameData();
+	}
+    
+    public void writeGameData() {
     	// WRITE NAME TO APPROPRIATE CELL IN GSHEET
 		try {
-			writeGameInfoToSheets(name, bigFish, numRounds, roundLengthInt, preRoundLengthInt);
+			writeGameInfoToSheets();
 			update();
 		} catch (IOException ioe) {
     		System.err.println("IOException in PlayerModel:\n" + ioe.getMessage());
     	} catch (GeneralSecurityException gse) {
     		System.err.println("GeneralSecurityException in PlayerModel:\n" + gse.getMessage());
     	} 
-	}
+    }
     
-    private void writeGameInfoToSheets(String name, String bigFish, int numRounds, int roundLength, int preRoundLength) throws IOException, GeneralSecurityException {
+    private void writeGameInfoToSheets() throws IOException, GeneralSecurityException {
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 		
 		Sheets service = new Sheets.Builder(HTTP_TRANSPORT, Main.JSON_FACTORY, Main.getCredentials(HTTP_TRANSPORT))
@@ -315,7 +347,7 @@ public class Game {
         List<List<Object>> values = response.getValues();
         
         if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
+            System.out.println("No game data found.");
         } else {
         	List row = values.get(0);
         	
@@ -343,7 +375,7 @@ public class Game {
         values = response.getValues();
         
         if (values == null || values.isEmpty()) {
-            System.out.println("No data found.");
+            System.out.println("No Big Fish data found.");
         } else {
         	List row = values.get(0);
         	this.bigFish = row.get(0) + "";

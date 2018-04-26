@@ -28,9 +28,9 @@ public class Log {
 		try {
     		getLogFromSheets();
     	} catch (IOException ioe) {
-    		System.err.println("IOException in PlayerModel:\n" + ioe.getMessage());
+    		System.err.println("IOException in Log:\n" + ioe.getMessage());
     	} catch (GeneralSecurityException gse) {
-    		System.err.println("GeneralSecurityException in PlayerModel:\n" + gse.getMessage());
+    		System.err.println("GeneralSecurityException in Log:\n" + gse.getMessage());
     	}
 		
 	}

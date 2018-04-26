@@ -11,16 +11,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class PlayerListView extends VBox {
 
 	private Label title;
-	private ListView<Player> list;
+	private static ListView<Player> list;
 	
 	private HBox profile;
 	private Button biteButton;
 	private Label name;
+	
+	private Text biteInfo;
 
 	public PlayerListView() {
 		this.setSpacing(20);
@@ -46,7 +49,35 @@ public class PlayerListView extends VBox {
 		name.setFont(new Font("Arial", 16));
 		biteButton = new Button("BITE");
 		biteButton.setOnMouseClicked(e -> {
-			// TODO
+			
+			Player attacker = Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex());
+			int defenderIndex = Game.playerModel.getPlayerList().indexOf(Game.playerModel.getPlayerWithName(name.getText()));
+			if (attacker.bite(defenderIndex)) {
+				// TODO HANDLE BITE SITUATION!!!
+				// rounds without eating is now 0
+				attacker.setRoundsWithoutEating(0);
+				Player defender = Game.playerModel.getPlayerList().get(defenderIndex);
+				biteInfo.setText("You successfully bit\n" + defender.getName()
+						+ ".\nThey are now dead.");
+				defender.setAliveStatus(false);
+				defender.setCurrentHabitat(Habitat.GRAVE);
+				defender.writePlayerInfo();
+			} else {
+				// Check if the defender is the Fugu
+				Player defender = Game.playerModel.getPlayerList().get(defenderIndex);
+				if (defender.getRole() == Role.FUGU) {
+					// attacker dies
+					biteInfo.setText("You unfortunately bit\n" + Game.playerModel.getPlayerList().get(defenderIndex).getName()
+							+ ".\nYou are now dead.");
+					attacker.setAliveStatus(false);
+					attacker.setCurrentHabitat(Habitat.GRAVE);
+					attacker.writePlayerInfo();
+				} else {
+					biteInfo.setText("You failed to bite\n" + defender.getName()
+					+ ".\nNothing happened.");
+				}
+			}
+			
 		});
 		biteButton.setDisable(true);
 		
@@ -54,7 +85,11 @@ public class PlayerListView extends VBox {
 		
 		profile.setBackground(Main.LIGHTCYAN);
 		profile.setPadding(new Insets(20,20,20,20));
-		this.getChildren().add(profile);
+		
+		biteInfo = new Text("");
+		biteInfo.setFont(new Font("Arial", 18));
+		
+		this.getChildren().addAll(profile, biteInfo);
 	}
 	
 	// sets up listview 
@@ -78,15 +113,37 @@ public class PlayerListView extends VBox {
 				public void changed(ObservableValue<? extends Player> ov, 
 						Player old_val, Player new_val) {
 					
-					// reset name label and enable/disable biteButton
-					name.setText(new_val.getName());
-					biteButton.setDisable(new_val.isAlive() /* ALSO CHECK IF IN SAME HABITAT */);
+					if (new_val != null) {
+						// reset name label and enable/disable biteButton
+						name.setText(new_val.getName());
+						// if player is alive and in same habitat, enable biteButton
+						biteButton.setDisable(!(
+								new_val.getAliveStatus() &&
+								Main.game.getCurrentRound() > 0 &&
+								Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex()).getAliveStatus() &&
+								!Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex()).getName().equals(new_val.getName()) &&
+								(Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex()).getCurrentHabitat() ==
+									new_val.getCurrentHabitat())
+								));
+					}
 					
 				}
 			}
 		);
 
 		this.getChildren().add(list);
+	}
+	
+	public static void updatePlayerList() {
+		System.out.println("UPDATING PLAYER LIST");
+		list.setItems(Game.playerModel.getPlayerList());
+		list.setCellFactory(new Callback<ListView<Player>, ListCell<Player>>() {
+			@Override 
+			public ListCell<Player> call(ListView<Player> list) {
+				// return a new PlayerCell() object here
+				return new PlayerCell();
+			}
+		});
 	}
 
 }

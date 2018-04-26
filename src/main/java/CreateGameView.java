@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 
 public class CreateGameView extends GridPane{
 
@@ -30,10 +31,10 @@ public class CreateGameView extends GridPane{
     public ComboBox<String> preRoundLengthCB;
     
     public Button createGameButton; 
-    
+    public Label pendingLabel;
 	
 	public CreateGameView() {	
-	    Main.currentPlayer.setIndex(13);
+	    Main.currentPlayer.setSheetsIndex(13);
 	    
 		setUp();
 	}
@@ -81,20 +82,20 @@ public class CreateGameView extends GridPane{
 		
 		roundNumberLabel = new Label("Number of Rounds:");
 		roundNumberCB = new ComboBox<Integer>();
-		roundNumberCB.getItems().addAll(2, 3, 4, 5, 6, 7, 8);
-		roundNumberCB.getSelectionModel().select(4);
+		roundNumberCB.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8);
+		roundNumberCB.getSelectionModel().select(0);
 		
 		roundLengthLabel = new Label("Round Length:");
 		roundLengthCB = new ComboBox<String>();
 		roundLengthCB.getItems().addAll("3 minutes", "3 minutes 30 seconds", "4 minutes", "4 minutes 30 seconds", "5 minutes",
 				"5 minutes 30 seconds", "6 minutes", "6 minutes 30 seconds", "7 minutes", "7 minutes 30 seconds", "8 minutes");
-		roundLengthCB.getSelectionModel().select("5 minutes");
+		roundLengthCB.getSelectionModel().select("3 minutes");
 		
 		preRoundLengthLabel = new Label("PreRound Length:");
 		preRoundLengthCB = new ComboBox<String>();
 		preRoundLengthCB.getItems().addAll("1 minute", "1 minute 30 seconds", "2 minutes", "2 minutes 30 seconds", "3 minutes",
 				"3 minutes 30 seconds", "4 minutes", "4 minutes 30 seconds", "5 minutes");
-		preRoundLengthCB.getSelectionModel().select("3 minutes");
+		preRoundLengthCB.getSelectionModel().select("1 minutes");
 		
 		roundInfo.add(roundNumberLabel, 0, 0);
 		roundInfo.add(roundNumberCB, 1, 0);
@@ -105,6 +106,10 @@ public class CreateGameView extends GridPane{
 		
 		createGameButton = new Button("Create Game");
 		createGameButton.setFont(Main.ARIAL_22);
+		
+		pendingLabel = new Label("");
+		pendingLabel.setFont(Main.ARIAL_22);
+		pendingLabel.setTextFill(Color.CRIMSON);
 		
 		noGameRunningLabel.setFont(Main.ARIAL_22);
 		gameNameLabel.setFont(Main.ARIAL_22);
@@ -126,7 +131,8 @@ public class CreateGameView extends GridPane{
 		this.add(bigFishTF, 1, 2);
 		
 		this.add(roundInfo, 0, 3, 2, 3);
-		this.add(createGameButton, 0, 6, 2, 1);
+		this.add(createGameButton, 0, 6);
+		this.add(pendingLabel, 1, 6);
 	}
 	
 }

@@ -6,29 +6,31 @@ import java.util.Random;
 
 public enum Role {
 
-    ORCA("Orca", 1, Habitat.OCEAN),
-    SHARK("Shark", 2, Habitat.REEF),
-    POLARBEAR("Polar Bear", 3, Habitat.ISLAND),
-    EEL("Eel", 4, Habitat.OCEAN),
-    OCTOPUS("Octopus", 5, Habitat.KELPFOREST),
-    SEASTAR("Sea Star", 5, Habitat.REEF),
-    SEAHORSE("Sea Horse", 5, Habitat.OCEAN),
-    SEALION("Sea Lion", 5, Habitat.ISLAND),
-    SEAURCHIN("Sea Urchin", 5, Habitat.KELPFOREST),
-    FUGU("Fugu", 5, Habitat.KELPFOREST),
-    CRAB("Crab", 5, Habitat.REEF),
-    REMORA("Remora", 5, Habitat.KELPFOREST),
-    TURTLE("Turtle", 5, Habitat.ISLAND),
-	BIGFISH("Big Fish", 6, null);
+    ORCA("Orca", 1, Habitat.OCEAN, "The Orca's goal is to survive."),
+    SHARK("Shark", 2, Habitat.REEF, "The Shark's goal is to survive."),
+    POLARBEAR("Polar Bear", 3, Habitat.ISLAND, "The Polar Bear's goal is to survive."),
+    EEL("Eel", 4, Habitat.OCEAN, "The Eel's goal is to ensure the ORCA dies."),
+    OCTOPUS("Octopus", 5, Habitat.KELPFOREST, "The Octopus's goal is to survive."),
+    SEASTAR("Sea Star", 5, Habitat.REEF, "The Sea Star's goal is to survive."),
+    SEAHORSE("Sea Horse", 5, Habitat.OCEAN, "The Sea Horse's goal is to survive."),
+    SEALION("Sea Lion", 5, Habitat.ISLAND, "The Sea Lion's goal is to survive and visit the OCEAN habitat at least once."),
+    SEAURCHIN("Sea Urchin", 5, Habitat.KELPFOREST, "The Sea Urchin's goal is to survive."),
+    FUGU("Fugu", 5, Habitat.KELPFOREST, "The Fugu's goal is to ensure 9 or more players die by the end of the game."),
+    CRAB("Crab", 5, Habitat.REEF, "The Crab's goal is to ensure the SHARK lives."),
+    REMORA("Remora", 5, Habitat.KELPFOREST, "The Remora's goal is to ensure the ORCA lives."),
+    TURTLE("Turtle", 5, Habitat.ISLAND, "The Turtle's goal is to have their predicted animal meet their win condition."),
+	BIGFISH("Big Fish", 6, null, "");
 
     private String name;
     private int rank;
     private Habitat home;
+    private String goal;
 
-    private Role(String name, int rank, Habitat home) {
+    private Role(String name, int rank, Habitat home, String goal) {
         this.name = name;
         this.rank = rank;
         this.home = home;
+        this.goal = goal;
     }
 
     public String getName() {
@@ -37,6 +39,10 @@ public enum Role {
 
     public int getRank() {
         return this.rank;
+    }
+    
+    public String getGoal() {
+    	return this.goal;
     }
 
     public Habitat getHome() { return this.home; }

@@ -1,18 +1,27 @@
 
 public class CurrentPlayer {
 
-	private int index;
+	private int sheetsIndex;
+	private int listIndex;
 	
 	public CurrentPlayer() {
 		// nothing?
 	}
 	
-	public int getIndex() {
-		return index;
+	public int getSheetsIndex() {
+		return sheetsIndex;
 	}
 	
-	public void setIndex(int i) {
-		index = i;
+	public void setSheetsIndex(int i) {
+		sheetsIndex = i;
+	}
+	
+	public int getListIndex() {
+		return listIndex;
+	}
+	
+	public void setListIndex(int i) {
+		listIndex = i;
 	}
 	
 }
