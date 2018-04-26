@@ -29,7 +29,7 @@ public class EndView extends VBox {
 	    if (Main.currentPlayer.getSheetsIndex() == 13) {
 	    	resultsLabel.setText("Game Over! Here are the results:");
 	    } else {
-		    if (Game.playerModel.getPlayerList().get(Main.currentPlayer.getListIndex()).getWinStatus()) {
+		    if (Game.playerModel.getPlayerList().get(Main.currentPlayer.getSheetsIndex()).getWinStatus()) {
 		    	// You won!
 		    	resultsLabel.setText("You won!");
 		    } else {
@@ -43,7 +43,7 @@ public class EndView extends VBox {
 	    playerResultsList.setPrefHeight(300);
 	    ObservableList<String> strings = FXCollections.observableArrayList();
 	    for (Player p : Game.playerModel.getPlayerList()) {
-	    	strings.add(p.getName() + " was the " + p.getRole().getName() + ". They " + (p.getAliveStatus() ? "won" : "lost") + ".");
+	    	strings.add(p.getName() + " was the " + p.getRole().getName() + ". They " + (p.getWinStatus() ? "won" : "lost") + ".");
 	    }
 	    playerResultsList.setItems(strings);
 		
